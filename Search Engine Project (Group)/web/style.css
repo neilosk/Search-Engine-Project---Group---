@@ -1,0 +1,25 @@
+body{
+    background-color:rgb(88, 130, 213);
+    /* background-image: url("https://media4.giphy.com/media/c5wbvuaVVLWzC/200w.webp?cid=ecf05e4747rnr2399obtf0f9gxfjyo6p8izlbla4xa0qvuvy&rid=200w.webp&ct=g"); */
+}
+
+#urllist {
+    color: #92cbfd;
+    border: 1px solid #dcdcdc;
+    border-radius: 3px;
+}
+
+input[type="text"] {
+    padding: 10px;
+    margin: 10px;
+    border: solid 1px #f4d56d;
+    border-radius: 4px;
+    min-width: 200px;
+    transition: box-shadow 0.3s, border 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="text"].focus {
+    border: solid 2px #81ebc2;
+    box-shadow: 0 0 5px 1px #384e85;
+}
