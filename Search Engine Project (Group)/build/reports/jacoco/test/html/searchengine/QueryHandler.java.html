@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QueryHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">searchengine</a> &gt; <a href="index.source.html" class="el_package">searchengine</a> &gt; <span class="el_source">QueryHandler.java</span></div><h1>QueryHandler.java</h1><pre class="source lang-java linenums">package searchengine;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+/**
+ * QueryHandler is responsible for handling the queries. It splits the query
+ * into a list of words and adds it to a list of queries.
+ * It then searches for the query in the index and returns
+ * a set of websites that contain the query.
+ */
+public class QueryHandler {
+
+    private Map&lt;String, Set&lt;WebSite&gt;&gt; index;
+<span class="fc" id="L21">    private List&lt;String[]&gt; query = new ArrayList&lt;String[]&gt;();</span>
+    private int totalNumberWebsites;
+    private int queryGroupIndex;
+
+    /**
+     * The constructor creates an instance of the QueryHandler class,
+     * and sets the index and the total number of websites.
+     * 
+     * @param index: is the map of words and a set of websites that
+     *               contains the word.
+     * @param totalNumberWebsites: is the total number of websites.
+     */
+<span class="fc" id="L33">    public QueryHandler(Map&lt;String, Set&lt;WebSite&gt;&gt; index, int totalNumberWebsites) {</span>
+<span class="fc" id="L34">        this.index = index;</span>
+<span class="fc" id="L35">        this.totalNumberWebsites = totalNumberWebsites;</span>
+<span class="fc" id="L36">        queryGroupIndex = 0;</span>
+<span class="fc" id="L37">    }</span>
+
+    /**
+     * The method searchQuery creates a set of websites that contain the query. It
+     * loops through the list of queries and for each query it calls the searchStrings
+     * method, and then calls the scoreFinder method, to set the score of each individual WebSite
+     * to the returned Set of WebSites.
+     * Then is adds the result to a list of websites and calls the rankedResults method
+     * to rank the WebSites according to the given score.
+     * 
+     * @param searchTerm: is the input from the user that we are searching for.
+     * @return a set of websites that contain the query.
+     */
+    public List&lt;WebSite&gt; searchQuery(String searchTerm) {
+<span class="fc" id="L51">        query.addAll(querySplit(searchTerm));</span>
+<span class="fc" id="L52">        List&lt;WebSite&gt; finalResult = new ArrayList&lt;WebSite&gt;();</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        for (String[] queryWords : query) {</span>
+<span class="fc" id="L54">            finalResult.addAll(scoreFinder(searchStrings(queryWords), finalResult));</span>
+<span class="fc" id="L55">        }</span>
+<span class="fc" id="L56">        finalResult = rankedResults(finalResult);</span>
+<span class="fc" id="L57">        return finalResult;</span>
+    }
+
+    /**
+     * This method splits the query into a list of words and adds it to a list of
+     * queries. It splits the query by &quot;OR&quot; and then splits the query by &quot; &quot; and
+     * adds it to the list of queries. It then returns the list of queries.
+     * 
+     * @param searchTerm: is the input from the user that we are searching for.
+     * @return a list of queries.
+     */
+    public List&lt;String[]&gt; querySplit(String searchTerm) {
+<span class="fc" id="L69">        List&lt;String[]&gt; result = new ArrayList&lt;String[]&gt;();</span>
+<span class="fc" id="L70">        String[] orQuery = searchTerm.split(&quot; OR &quot;);</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        for (String string : orQuery) {</span>
+<span class="fc" id="L72">            result.add(string.trim().toLowerCase().split(&quot; &quot;));</span>
+        }
+<span class="fc" id="L74">        return result;</span>
+    }
+
+
+
+    /**
+     * The searchStrings method searches for each word from each query
+     * in the  inverted index, and returns a set of websites that contain each query.
+     * It uses the index to search for a group of words from each group of queries.
+     * In case any of the words are not found it returns an empty set.
+     * 
+     * @param queryWords: group of words from each group of queries (between every
+     *                    &quot;OR&quot;).
+     * @return a set of websites that contain these group of words.
+     */
+    public Set&lt;WebSite&gt; searchStrings(String[] queryWords) {
+<span class="fc" id="L90">        Set&lt;WebSite&gt; result = new HashSet&lt;WebSite&gt;();</span>
+<span class="fc" id="L91">        boolean falseWord = false;</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        for (String word : queryWords) {</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            if (falseWord == false) {</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">                if (result.isEmpty()) {</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">                    for (String i : index.keySet()) {</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">                        if (i.equals(word)) {</span>
+<span class="fc" id="L97">                            result.addAll(index.get(i));</span>
+                        }
+<span class="fc" id="L99">                    }</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">                    if (result.isEmpty()) {</span>
+<span class="fc" id="L101">                        falseWord = true;</span>
+                    }
+                } else {
+<span class="fc" id="L104">                    result = result.stream()</span>
+<span class="fc" id="L105">                            .filter(website -&gt; website.getContent().contains(word))</span>
+<span class="fc" id="L106">                            .collect(Collectors.toSet());</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">                    if (result.isEmpty()) {</span>
+<span class="fc" id="L108">                        falseWord = true;</span>
+                    }
+                }
+            }
+        }
+<span class="fc" id="L113">        return result;</span>
+    }
+
+    /**
+     * This scoreFinder method calculates the score of each website that matches the
+     * query. It loops through the set of websites that match the query and
+     * calculates the score of each website. It then calls the tfIdf method to
+     * calculate the tfIdf score of each website. It keeps the max score of each set of words
+     * of the searchTerm by comparing the score that the WebSite currently has with the last calculated one.
+     * It then adds the website to a list of websites and returns the list.
+     *
+     * @param result: is the set of websites that match the query.
+     * @return a sorted List of websites that match the query.
+     */
+
+    public List&lt;WebSite&gt; scoreFinder(Set&lt;WebSite&gt; result, List&lt;WebSite&gt; finalResult) {
+<span class="fc" id="L129">        List&lt;WebSite&gt; rankedWebSites = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        for (WebSite webSite : result) {</span>
+<span class="fc" id="L131">            List&lt;String&gt; content = webSite.getContent();</span>
+<span class="fc" id="L132">            double contentSize = content.size();</span>
+<span class="fc" id="L133">            double appearence = 0;</span>
+<span class="fc" id="L134">            double weight = 0;</span>
+
+<span class="fc bfc" id="L136" title="All 2 branches covered.">            for (String word : query.get(queryGroupIndex)) {</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">                for (String contentWord : content) {</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">                    if (word.equals(contentWord)) {</span>
+<span class="fc" id="L139">                        appearence++;</span>
+                    }
+
+<span class="fc" id="L142">                }</span>
+
+            }
+
+<span class="fc" id="L146">            weight = (appearence / contentSize);</span>
+<span class="fc" id="L147">            var initialScore = webSite.getScore();</span>
+<span class="fc" id="L148">            webSite.setScore(weight);</span>
+<span class="fc" id="L149">            var tfIdf = tfIdf(webSite, result);</span>
+<span class="fc" id="L150">            webSite.setScore(tfIdf);</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">            if (webSite.getScore() &lt; initialScore) {</span>
+<span class="fc" id="L152">                webSite.setScore(initialScore);</span>
+            }
+<span class="fc bfc" id="L154" title="All 2 branches covered.">            if (!finalResult.contains(webSite)) {</span>
+<span class="fc" id="L155">                rankedWebSites.add(webSite);</span>
+            }
+<span class="fc" id="L157">        }</span>
+
+<span class="fc" id="L159">        queryGroupIndex++;</span>
+<span class="fc" id="L160">        return rankedWebSites;</span>
+    }
+
+    /**
+     * This rankedResults method sorts the final result by the score of the website
+     * and then by the title of the website. It then returns the final result. It
+     * uses the Comparator interface to compare the score of the websites and then
+     * the title of the websites. It then reverses the list to get the websites
+     * with the highest score first.
+     * 
+     * @param finalResult: is the list of websites that match the query.
+     * @return a sorted List of websites that match the query.
+     */ 
+    public List&lt;WebSite&gt; rankedResults(List&lt;WebSite&gt; finalResult) {
+<span class="fc" id="L174">        Comparator&lt;WebSite&gt; c = Comparator.comparingDouble(WebSite::getScore).thenComparing(WebSite::getTitle);</span>
+<span class="fc" id="L175">        Collections.sort(finalResult, c);</span>
+<span class="fc" id="L176">        Collections.reverse(finalResult);</span>
+<span class="fc" id="L177">        return finalResult;</span>
+    }
+    
+
+    /**
+     * This inverseRank method calculates the inverse rank of the result and returns
+     * it.
+     * 
+     * @param result is the set of websites that match each query group.
+     * @return the inverse rank of the result.
+     */
+    public double inverseRank(Set&lt;WebSite&gt; result) {
+<span class="fc" id="L189">        double inverseRank = Math.log(totalNumberWebsites / (result.size()));</span>
+<span class="fc" id="L190">        return inverseRank;</span>
+    }
+
+
+    /**
+     * This tfIdf method calculates the tfIdf of the website and sets it as the
+     * score of the website. It multiplies the score of the website with the
+     * inverseRank of the result. It then returns the tfIdf of the website.
+     *
+     * @param website is the website that we are calculating the tfIdf for.
+     * @param result is the set of websites that match each query group.
+     * @return the tfIdf of the website.
+     */
+    public double tfIdf(WebSite website, Set&lt;WebSite&gt; result) {
+<span class="fc" id="L204">        double tfIdf = 0;</span>
+<span class="fc" id="L205">        tfIdf = website.getScore() * inverseRank(result);</span>
+<span class="fc" id="L206">        return tfIdf;</span>
+    }
+
+    /**
+     * This method sets the query. It is used for testing.
+     * @param query is the list of queries.
+     */
+
+    public void setQuery(List&lt;String[]&gt; query) {
+<span class="fc" id="L215">        this.query = query;</span>
+<span class="fc" id="L216">    }</span>
+
+    /**
+     * This method sets the queryGroupIndex. It is used for testing.
+     * @param queryGroupIndex
+     */
+    public void setQueryGroupIndex(int queryGroupIndex) {
+<span class="nc" id="L223">        this.queryGroupIndex = queryGroupIndex;</span>
+<span class="nc" id="L224">    }</span>
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

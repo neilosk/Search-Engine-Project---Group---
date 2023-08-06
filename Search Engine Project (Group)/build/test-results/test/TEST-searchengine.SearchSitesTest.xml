@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="searchengine.SearchSitesTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2022-12-17T10:44:59" hostname="DESKTOP-QL3P92T" time="0.031">
+  <properties/>
+  <testcase name="search_singleword_test_file_errors()" classname="searchengine.SearchSitesTest" time="0.002"/>
+  <testcase name="populateIndex_testfileSize()" classname="searchengine.SearchSitesTest" time="0.002"/>
+  <testcase name="search_singleword_file_errors()" classname="searchengine.SearchSitesTest" time="0.001"/>
+  <testcase name="populateIndex_testfileErrorSize()" classname="searchengine.SearchSitesTest" time="0.002"/>
+  <testcase name="search_twoWords_OR_wordandtest_file_errors()" classname="searchengine.SearchSitesTest" time="0.001"/>
+  <testcase name="search_twoWords_OR_tests()" classname="searchengine.SearchSitesTest" time="0.002"/>
+  <testcase name="search_singleword()" classname="searchengine.SearchSitesTest" time="0.002"/>
+  <testcase name="search()" classname="searchengine.SearchSitesTest" time="0.002"/>
+  <testcase name="search_twoWords_OR_file_errors()" classname="searchengine.SearchSitesTest" time="0.001"/>
+  <testcase name="search_twoWords_OR_wordandtest()" classname="searchengine.SearchSitesTest" time="0.001"/>
+  <testcase name="search_twoWords_OR()" classname="searchengine.SearchSitesTest" time="0.002"/>
+  <testcase name="search_twoWords_OR_tests_file_errors()" classname="searchengine.SearchSitesTest" time="0.002"/>
+  <testcase name="search_singleword_test()" classname="searchengine.SearchSitesTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

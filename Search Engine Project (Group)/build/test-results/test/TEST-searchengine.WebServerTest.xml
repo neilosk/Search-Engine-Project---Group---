@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="searchengine.WebServerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-12-17T10:44:59" hostname="DESKTOP-QL3P92T" time="0.767">
+  <properties/>
+  <testcase name="lookupWebServer()" classname="searchengine.WebServerTest" time="0.767"/>
+  <system-out><![CDATA[â•­â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â•®
+â”‚ WebServer running on http://localhost:34577 â”‚
+â•°â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â•¯
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

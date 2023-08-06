@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WebServer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">searchengine</a> &gt; <a href="index.source.html" class="el_package">searchengine</a> &gt; <span class="el_source">WebServer.java</span></div><h1>WebServer.java</h1><pre class="source lang-java linenums">package searchengine;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.InetSocketAddress;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
+
+public class WebServer {
+  static final int PORT = 8080;
+  static final int BACKLOG = 0;
+<span class="fc" id="L19">  static final Charset CHARSET = StandardCharsets.UTF_8;</span>
+
+  private SearchSites pages;
+  HttpServer server;
+
+<span class="fc" id="L24">  WebServer(int port, String filename) throws IOException {</span>
+<span class="fc" id="L25">    pages = new SearchSites(filename);</span>
+
+<span class="fc" id="L27">    server = HttpServer.create(new InetSocketAddress(port), BACKLOG);</span>
+<span class="fc" id="L28">    server.start();</span>
+<span class="fc" id="L29">    buildServer();</span>
+<span class="fc" id="L30">    printWelcomeMessage(port);</span>
+<span class="fc" id="L31">  }</span>
+
+  private void buildServer() {
+<span class="pc" id="L34">    server.createContext(&quot;/&quot;, io -&gt; respond(io, 200, &quot;text/html&quot;, getFile(&quot;web/index.html&quot;)));</span>
+<span class="fc" id="L35">    server.createContext(&quot;/search&quot;, io -&gt; search(io));</span>
+<span class="fc" id="L36">    server.createContext(</span>
+<span class="nc" id="L37">        &quot;/favicon.ico&quot;, io -&gt; respond(io, 200, &quot;image/x-icon&quot;, getFile(&quot;web/favicon.ico&quot;)));</span>
+<span class="fc" id="L38">    server.createContext(</span>
+<span class="nc" id="L39">        &quot;/code.js&quot;, io -&gt; respond(io, 200, &quot;application/javascript&quot;, getFile(&quot;web/code.js&quot;)));</span>
+<span class="fc" id="L40">    server.createContext(</span>
+<span class="nc" id="L41">        &quot;/style.css&quot;, io -&gt; respond(io, 200, &quot;text/css&quot;, getFile(&quot;web/style.css&quot;)));</span>
+<span class="fc" id="L42">  }</span>
+
+  private void printWelcomeMessage(int port) {
+<span class="fc" id="L45">    String msg = &quot; WebServer running on http://localhost:&quot; + port + &quot; &quot;;</span>
+<span class="fc" id="L46">    System.out.println(&quot;â•­&quot; + &quot;â”€&quot;.repeat(msg.length()) + &quot;â•®&quot;);</span>
+<span class="fc" id="L47">    System.out.println(&quot;â”‚&quot; + msg + &quot;â”‚&quot;);</span>
+<span class="fc" id="L48">    System.out.println(&quot;â•°&quot; + &quot;â”€&quot;.repeat(msg.length()) + &quot;â•¯&quot;);</span>
+<span class="fc" id="L49">  }</span>
+
+  // void search(HttpExchange io) {
+  // var searchTerm = io.getRequestURI().getRawQuery().split(&quot;=&quot;)[1];
+  // var response = new ArrayList&lt;String&gt;();
+  // for (var page : search(searchTerm)) {
+  // response.add(String.format(&quot;{\&quot;url\&quot;: \&quot;%s\&quot;, \&quot;title\&quot;: \&quot;%s\&quot;}&quot;,
+  // page.get(0).substring(6), page.get(1)));
+  // }
+  // var bytes = response.toString().getBytes(CHARSET);
+  // respond(io, 200, &quot;application/json&quot;, bytes);
+  // }
+
+  /**
+   * The searchTerm could not be handled as a string so URLDecoder and toString
+   * methods were implemented.
+   * 
+   * @param string
+   */
+  void search(HttpExchange string) {
+<span class="fc" id="L69">    var searchTerm = string.getRequestURI().getRawQuery().split(&quot;=&quot;)[1];</span>
+    try {
+<span class="fc" id="L71">      searchTerm = URLDecoder.decode(searchTerm, StandardCharsets.UTF_8.toString());</span>
+<span class="nc" id="L72">    } catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L73">      System.err.println(e);</span>
+<span class="fc" id="L74">    }</span>
+<span class="fc" id="L75">    var response = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">    for (var page : pages.search(searchTerm)) {</span>
+<span class="fc" id="L77">      response.add(String.format(&quot;{\&quot;url\&quot;: \&quot;%s\&quot;, \&quot;title\&quot;: \&quot;%s\&quot;}&quot;,</span>
+<span class="fc" id="L78">          page.getUrl(), page.getTitle()));</span>
+<span class="fc" id="L79">    }</span>
+<span class="fc" id="L80">    var bytes = response.toString().getBytes(CHARSET);</span>
+<span class="fc" id="L81">    respond(string, 200, &quot;application/json&quot;, bytes);</span>
+<span class="fc" id="L82">  }</span>
+
+  byte[] getFile(String filename) {
+    try {
+<span class="nc" id="L86">      return Files.readAllBytes(Paths.get(filename));</span>
+<span class="nc" id="L87">    } catch (IOException e) {</span>
+<span class="nc" id="L88">      e.printStackTrace();</span>
+<span class="nc" id="L89">      return new byte[0];</span>
+    }
+  }
+
+  void respond(HttpExchange io, int code, String mime, byte[] response) {
+    try {
+<span class="fc" id="L95">      io.getResponseHeaders()</span>
+<span class="fc" id="L96">          .set(&quot;Content-Type&quot;, String.format(&quot;%s; charset=%s&quot;, mime, CHARSET.name()));</span>
+<span class="fc" id="L97">      io.sendResponseHeaders(200, response.length);</span>
+<span class="fc" id="L98">      io.getResponseBody().write(response);</span>
+<span class="nc" id="L99">    } catch (Exception e) {</span>
+    } finally {
+<span class="fc" id="L101">      io.close();</span>
+    }
+<span class="fc" id="L103">  }</span>
+
+  public static void main(final String... args) throws IOException {
+<span class="nc" id="L106">    var filename = Files.readString(Paths.get(&quot;config.txt&quot;)).strip();</span>
+<span class="nc" id="L107">    new WebServer(PORT, filename);</span>
+<span class="nc" id="L108">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

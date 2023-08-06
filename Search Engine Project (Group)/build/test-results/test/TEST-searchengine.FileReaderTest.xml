@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="searchengine.FileReaderTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2022-12-17T10:44:58" hostname="DESKTOP-QL3P92T" time="0.122">
+  <properties/>
+  <testcase name="testError_ReadFile()" classname="searchengine.FileReaderTest" time="0.099"/>
+  <testcase name="createWebSiteTest()" classname="searchengine.FileReaderTest" time="0.006"/>
+  <testcase name="testReadFile()" classname="searchengine.FileReaderTest" time="0.012"/>
+  <testcase name="createWebSiteTest_Error()" classname="searchengine.FileReaderTest" time="0.002"/>
+  <testcase name="createWebSiteTest_Error2()" classname="searchengine.FileReaderTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

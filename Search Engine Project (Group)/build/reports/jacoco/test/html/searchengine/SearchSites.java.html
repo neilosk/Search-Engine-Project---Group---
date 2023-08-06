@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchSites.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">searchengine</a> &gt; <a href="index.source.html" class="el_package">searchengine</a> &gt; <span class="el_source">SearchSites.java</span></div><h1>SearchSites.java</h1><pre class="source lang-java linenums">package searchengine;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * Class SearchSites is responsible for creating an instance of the FileReader
+ * class,
+ * and creating a list of WebSites by implementing the readFile method from the
+ * FileReader class.
+ * * @param filename is used as a parameter of the constructor.
+ */
+
+public class SearchSites {
+
+    private Set&lt;WebSite&gt; allWebSites;
+    private int totalNumberWebsites;
+  
+<span class="fc" id="L22">    private Map&lt;String, Set&lt;WebSite&gt;&gt; index = new HashMap&lt;&gt;();</span>
+
+
+    /**
+     * The constructor creates an instance of the FileReader class and creates a
+     * list of WebSites by implementing the readFile method from the FileReader
+     * class.
+     * @param filename is used as a parameter of the constructor.
+     */
+<span class="fc" id="L31">    public SearchSites(String filename) {</span>
+<span class="fc" id="L32">        FileReader fr = new FileReader(filename);</span>
+<span class="fc" id="L33">        allWebSites = fr.readFile();</span>
+<span class="fc" id="L34">        index = populateIndex(allWebSites);</span>
+<span class="fc" id="L35">        totalNumberWebsites = allWebSites.size();</span>
+<span class="fc" id="L36">    }</span>
+
+    /**
+     * The method search, creates a new object of the queryhandler, and gives it the inverted index
+     * and the size of websites to match against. It the creates a list of the search result, which
+     * eventually is returned.
+     * 
+     * @param searchTerm is the input from the user that we are searching for.
+     * @return a list of websites that contain the searchTerm.
+     */
+
+    public List&lt;WebSite&gt; search(String searchTerm) {
+<span class="fc" id="L48">        QueryHandler qh = new QueryHandler(index, totalNumberWebsites);</span>
+<span class="fc" id="L49">        List&lt;WebSite&gt; qhResult = qh.searchQuery(searchTerm);</span>
+<span class="fc" id="L50">        return qhResult;</span>
+    }
+
+    /**
+     * The method populateIndex creates a map of words and a set of websites that contains
+     * the word. It loops through the set of websites, and for each website it
+     * loops through the list of words. If the word is already in the map it
+     * adds the website to the set of websites, that contains the word. If the
+     * word is not in the map, it creates a new set of websites and adds the
+     * website to the set.
+     * @param result is the Set of websites that we are indexing   
+     * @return a map of words and a set of websites that contains the word       
+    */
+    public Map&lt;String, Set&lt;WebSite&gt;&gt; populateIndex(Set&lt;WebSite&gt; result) {  
+    
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        for (WebSite web : result) {</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            for (String word : web.getContent()) {</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">                if (index.containsKey(word)) {</span>
+<span class="fc" id="L68">                    index.get(word).add(web);</span>
+                } else {
+<span class="fc" id="L70">                    Set&lt;WebSite&gt; set = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L71">                    set.add(web);</span>
+<span class="fc" id="L72">                    index.put(word, set);</span>
+                }
+<span class="fc" id="L74">            }</span>
+<span class="fc" id="L75">        }</span>
+<span class="fc" id="L76">        return index;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

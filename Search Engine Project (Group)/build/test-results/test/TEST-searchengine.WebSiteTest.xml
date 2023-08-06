@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="searchengine.WebSiteTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2022-12-17T10:44:59" hostname="DESKTOP-QL3P92T" time="0.02">
+  <properties/>
+  <testcase name="isEmpty_false()" classname="searchengine.WebSiteTest" time="0.001"/>
+  <testcase name="testWebSite()" classname="searchengine.WebSiteTest" time="0.003"/>
+  <testcase name="isEmpty_true()" classname="searchengine.WebSiteTest" time="0.005"/>
+  <testcase name="testWebSiteError()" classname="searchengine.WebSiteTest" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

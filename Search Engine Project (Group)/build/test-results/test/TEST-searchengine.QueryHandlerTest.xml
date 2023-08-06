@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="searchengine.QueryHandlerTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2022-12-17T10:44:59" hostname="DESKTOP-QL3P92T" time="0.08">
+  <properties/>
+  <testcase name="searchQyery_Test_rank_OR()" classname="searchengine.QueryHandlerTest" time="0.017"/>
+  <testcase name="searchQyery_Test_OR()" classname="searchengine.QueryHandlerTest" time="0.007"/>
+  <testcase name="searchQyery_Test()" classname="searchengine.QueryHandlerTest" time="0.004"/>
+  <testcase name="searchStringsTestFail()" classname="searchengine.QueryHandlerTest" time="0.002"/>
+  <testcase name="scoreFinderTest()" classname="searchengine.QueryHandlerTest" time="0.002"/>
+  <testcase name="Scoring_Test()" classname="searchengine.QueryHandlerTest" time="0.004"/>
+  <testcase name="querySplitTest()" classname="searchengine.QueryHandlerTest" time="0.001"/>
+  <testcase name="scoreFinderTest2()" classname="searchengine.QueryHandlerTest" time="0.002"/>
+  <testcase name="scoreFinderTest3()" classname="searchengine.QueryHandlerTest" time="0.004"/>
+  <testcase name="scoreFinderTest4()" classname="searchengine.QueryHandlerTest" time="0.003"/>
+  <testcase name="searchStringsTest1()" classname="searchengine.QueryHandlerTest" time="0.001"/>
+  <testcase name="searchStringsTest2()" classname="searchengine.QueryHandlerTest" time="0.007"/>
+  <testcase name="rankedResultsTest1()" classname="searchengine.QueryHandlerTest" time="0.003"/>
+  <testcase name="rankedResultsTest2()" classname="searchengine.QueryHandlerTest" time="0.003"/>
+  <testcase name="searchFalseword_Test()" classname="searchengine.QueryHandlerTest" time="0.003"/>
+  <testcase name="searchQyery_Test_rank()" classname="searchengine.QueryHandlerTest" time="0.001"/>
+  <testcase name="inverseRankTest()" classname="searchengine.QueryHandlerTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
